@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:init_project/app/modules/home/views/detail_view.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -9,6 +10,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blue[50],
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('HomeView'),
         centerTitle: true,
@@ -31,11 +33,34 @@ class HomeView extends GetView<HomeController> {
                   hintStyle: TextStyle(fontSize: 16),
                   contentPadding: const EdgeInsets.all(16)
                 ),
-                onChanged: (value){
-
+                onSubmitted: (value) async{
+                  await controller.search(value);
                 },
               )              
             )
+          ),
+
+          SingleChildScrollView(
+            child: Container(
+              height: 400,
+              child: Obx((){
+                return ListView.builder(
+                  itemCount: controller.repositoriesLenght.value,
+                  itemBuilder: (context, index){
+                    return Card(
+                      child: ListTile(
+                        title: Text('${controller.repositories![index].fullName}'),
+                        onTap: (){
+                          controller.currentRepository = controller.repositories![index];
+                          print(controller.currentRepository!.avatarUrl);
+                          Get.to(() => DetailView());
+                        },
+                      ),
+                    );
+                  }
+                );
+              })
+            ),
           )
         ],
       )

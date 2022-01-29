@@ -1,20 +1,15 @@
 import 'package:get/get.dart';
+import 'package:init_project/app/data/http_method.dart';
+import 'package:init_project/app/data/repository.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
-
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+ 
+  List<Repository>? repositories;
+  final repositoriesLenght = 0.obs;
+  Future<void> search(value) async{
+    repositories = await HttpMethod.getRepositories(value);
+    repositoriesLenght.value = repositories!.length;
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {}
-  void increment() => count.value++;
+  Repository? currentRepository;
 }
