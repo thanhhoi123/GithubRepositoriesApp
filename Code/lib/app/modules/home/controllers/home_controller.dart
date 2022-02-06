@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:init_project/app/data/http_method.dart';
 import 'package:init_project/app/data/repository.dart';
+import 'package:init_project/app/modules/home/views/my_themes.dart';
 
 class HomeController extends GetxController {
  
@@ -12,4 +13,6 @@ class HomeController extends GetxController {
   }
 
   Repository? currentRepository;
+
+  bool isDarkMode = false;
 }
