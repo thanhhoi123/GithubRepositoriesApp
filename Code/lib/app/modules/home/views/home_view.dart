@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -10,9 +11,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      // backgroundColor: Colors.blue[50],
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('HomeView'),
@@ -37,6 +36,7 @@ class HomeView extends GetView<HomeController> {
         children: [
           Flexible(
             child: Container(
+              height: height/14,
               margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -61,20 +61,31 @@ class HomeView extends GetView<HomeController> {
 
           SingleChildScrollView(
             child: Container(
-              height: height/2,
-              width: width,
+              height: 2 * height/3,
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 2)
+              ),
               child: Obx((){
                 return ListView.builder(
                   itemCount: controller.repositoriesLenght.value,
                   itemBuilder: (context, index){
-                    return Card(
-                      child: ListTile(
-                        title: Text('${controller.repositories![index].fullName}'),
-                        onTap: (){
-                          controller.currentRepository = controller.repositories![index];
-                          print(controller.currentRepository!.avatarUrl);
-                          Get.to(() => DetailView());
-                        },
+                    return OpenContainer(
+                      transitionDuration: const Duration(seconds: 1,),
+                      openBuilder: (context, action){
+                        controller.currentRepository = controller.repositories![index];
+                        return DetailView();
+                      },
+                      closedBuilder: (context, openContainer) => Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            title: Text('${controller.repositories![index].fullName}'),
+                            onTap: (){
+                              openContainer();
+                            },
+                          ),
+                        ),
                       ),
                     );
                   }
@@ -86,4 +97,6 @@ class HomeView extends GetView<HomeController> {
       )
     );
   }
+
+
 }
